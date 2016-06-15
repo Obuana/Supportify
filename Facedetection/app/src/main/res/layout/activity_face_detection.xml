@@ -9,8 +9,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="euro.faucheisti.facedetection.FaceDetection">
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Choisir photo"
+        android:id="@+id/bGalerie"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="148dp"
+        android:onClick="ouvrirGalerie" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prendre photo"
+        android:id="@+id/bCamera"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="prendrePhoto" />
 </RelativeLayout>
