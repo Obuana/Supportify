@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class FaceDetection extends AppCompatActivity {
 
     private Bitmap myBitmap;
 
-
+    String mCurrentPhotoPath;
     private Uri fileUri;
 
 
@@ -74,6 +75,7 @@ public class FaceDetection extends AppCompatActivity {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
+                System.out.println(photoFile);
             } catch (IOException ex) {
 
             }
@@ -137,6 +139,7 @@ public class FaceDetection extends AppCompatActivity {
                 }
 
 
+                // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo choisie
                 myView mView = new myView(context, myBitmap);
                 setContentView(mView);
 
@@ -145,15 +148,44 @@ public class FaceDetection extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if (requestCode == PRENDRE_PHOTO ){
-            System.out.println(data);
-            if (resultCode == RESULT_OK && data != null && data.getData() != null){
+            if (resultCode == RESULT_OK  ){
 
-                Bundle extras = data.getExtras();
-                myBitmap = (Bitmap) extras.get("data");
-                //myBitmap.setConfig(Bitmap.Config.RGB_565);
+                // Récupère la photo créée par l'appareil dans un bitamp pour la passée à la vue
+                BitmapFactory.Options BitmapFactoryOptionsbfo = new BitmapFactory.Options();
+                BitmapFactoryOptionsbfo.inPreferredConfig = Bitmap.Config.RGB_565;
+                BitmapFactoryOptionsbfo.inJustDecodeBounds = false;
+                System.out.println(mCurrentPhotoPath);
+                myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, BitmapFactoryOptionsbfo);
+
+                // Code récupérer permettant de tourner la photo suivant l'orientation de l'appareil
+                ExifInterface exif = null;
+                try {
+                    exif = new ExifInterface(mCurrentPhotoPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                int orientation = ExifInterface.ORIENTATION_NORMAL;
+
+                if (exif != null)
+                    orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        myBitmap = rotateBitmap(myBitmap, 90);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        myBitmap = rotateBitmap(myBitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        myBitmap = rotateBitmap(myBitmap, 270);
+                        break;
+                }
+
+                // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo prise
                 myView mView = new myView(context, myBitmap);
                 setContentView(mView);
-
 
             }else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
@@ -294,8 +326,6 @@ public class FaceDetection extends AppCompatActivity {
     }
 
     // Code récupérer pour enregister une photo dans un fichier
-    String mCurrentPhotoPath;
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -309,7 +339,7 @@ public class FaceDetection extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
