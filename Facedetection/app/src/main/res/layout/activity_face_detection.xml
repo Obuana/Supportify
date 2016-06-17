@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,4 +29,16 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:onClick="prendrePhoto" />
+
+    <euro.faucheisti.facedetection.myView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view"
+        android:layout_below="@+id/bCamera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        custom:bitmapUriPath=""
+        custom:bitmapPath="" />
+
+
 </RelativeLayout>
