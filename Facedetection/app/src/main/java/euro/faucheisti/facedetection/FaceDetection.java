@@ -5,12 +5,10 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,7 +31,6 @@ public class FaceDetection extends AppCompatActivity {
     private int OUVRIR_GALERIE = 1;
     private int PRENDRE_PHOTO = 2;
 
-    private myView mView;
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -54,7 +51,6 @@ public class FaceDetection extends AppCompatActivity {
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
 
-        mView = (myView) findViewById(R.id.view);
 
     }
 
@@ -104,14 +100,18 @@ public class FaceDetection extends AppCompatActivity {
             String path = uri.toString();
 
             // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo choisie
-            mView.setBitmapUriPath(path);
+            Intent photoActivity = new Intent(context, PhotoActivity.class);
+            photoActivity.putExtra("uriPath", path);
+            startActivity(photoActivity);
 
 
         } else if (requestCode == PRENDRE_PHOTO ){
             if (resultCode ==  RESULT_OK  ){
 
                 // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo prise
-                mView.setBitmapPath(mCurrentPhotoPath);
+                Intent photoActivity = new Intent(context, PhotoActivity.class);
+                photoActivity.putExtra("Path", mCurrentPhotoPath);
+                startActivity(photoActivity);
 
             }else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture

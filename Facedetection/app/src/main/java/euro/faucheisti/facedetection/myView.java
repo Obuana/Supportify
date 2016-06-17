@@ -61,6 +61,8 @@ public class myView extends View {
         BitmapFactoryOptionsbfo.inPreferredConfig = Bitmap.Config.RGB_565;
         bitmapUriPath = attr.getString(R.styleable.myView_bitmapUriPath);
         bitmapPath = attr.getString(R.styleable.myView_bitmapPath);
+        System.out.println(bitmapPath);
+        System.out.println(bitmapUriPath);
 
 
 
@@ -81,6 +83,7 @@ public class myView extends View {
 
             }else if(!bitmapPath.equals("")){
                 myBitmap = BitmapFactory.decodeFile(bitmapPath, BitmapFactoryOptionsbfo);
+                System.out.println(bitmapPath);
                 exif = new ExifInterface(bitmapPath);
                 bitmapPath = "";
 
@@ -135,14 +138,7 @@ public class myView extends View {
             }
 
         }
-    }
 
-    public String getBitmapUriPath() {
-        return bitmapUriPath;
-    }
-
-    public String getBitmapPath() {
-        return bitmapPath;
     }
 
     public void setBitmapUriPath(String bitmapUriPath) {

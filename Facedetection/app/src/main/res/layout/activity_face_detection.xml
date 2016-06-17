@@ -30,15 +30,5 @@
         android:layout_centerHorizontal="true"
         android:onClick="prendrePhoto" />
 
-    <euro.faucheisti.facedetection.myView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/view"
-        android:layout_below="@+id/bCamera"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp"
-        custom:bitmapUriPath=""
-        custom:bitmapPath="" />
-
 
 </RelativeLayout>
