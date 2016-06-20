@@ -99,7 +99,7 @@ public class FaceDetection extends AppCompatActivity {
 
             String path = uri.toString();
 
-            // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo choisie
+            // Crée la vue contenant la photo modifiée et lui passe le chemin du bitmap de la photo choisie
             Intent photoActivity = new Intent(context, PhotoActivity.class);
             photoActivity.putExtra("uriPath", path);
             startActivity(photoActivity);
@@ -108,7 +108,7 @@ public class FaceDetection extends AppCompatActivity {
         } else if (requestCode == PRENDRE_PHOTO ){
             if (resultCode ==  RESULT_OK  ){
 
-                // Crée la vue contenant la photo modifiée et lui passe le bitmap de la photo prise
+                // Crée la vue contenant la photo modifiée et lui passe le  chemin du bitmap de la photo prise
                 Intent photoActivity = new Intent(context, PhotoActivity.class);
                 photoActivity.putExtra("Path", mCurrentPhotoPath);
                 startActivity(photoActivity);

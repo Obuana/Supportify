@@ -46,6 +46,7 @@ public class myView extends View {
 
     Bitmap myBitmap;
     Bitmap myBitmap2;
+    Bitmap result;
 
     Context context;
 
@@ -53,6 +54,8 @@ public class myView extends View {
         super(context, attrs);
 
         this.context = context;
+
+        setDrawingCacheEnabled(true);
 
         TypedArray attr = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.myView, 0, 0);
@@ -83,7 +86,6 @@ public class myView extends View {
 
             }else if(!bitmapPath.equals("")){
                 myBitmap = BitmapFactory.decodeFile(bitmapPath, BitmapFactoryOptionsbfo);
-                System.out.println(bitmapPath);
                 exif = new ExifInterface(bitmapPath);
                 bitmapPath = "";
 
@@ -115,17 +117,15 @@ public class myView extends View {
         }
 
         if (myBitmap != null) {
+            result = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
+            Canvas temp = new Canvas(result);
             myBitmap = Bitmap.createScaledBitmap(myBitmap, this.getWidth(), this.getHeight(), true);
             imageWidth = myBitmap.getWidth();
             imageHeight = myBitmap.getHeight();
             myFace = new FaceDetector.Face[numberOfFace];
             myFaceDetect = new FaceDetector(imageWidth, imageHeight, numberOfFace);
             numberOfFaceDetected = myFaceDetect.findFaces(myBitmap, myFace);
-            canvas.drawBitmap(myBitmap, 0, 0, null);
-            Paint myPaint = new Paint();
-            myPaint.setColor(Color.GREEN);
-            myPaint.setStyle(Paint.Style.STROKE);
-            myPaint.setStrokeWidth(3);
+            temp.drawBitmap(myBitmap, 0, 0, null);
 
             if (numberOfFaceDetected != 0) {
                 FaceDetector.Face face = myFace[0];
@@ -134,11 +134,23 @@ public class myView extends View {
                 myEyesDistance = face.eyesDistance();
                 myBitmap2 = Bitmap.createScaledBitmap(myBitmap2, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
 
-                canvas.drawBitmap(myBitmap2, (float) (myMidPoint.x - myEyesDistance * 2.5), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
+                temp.drawBitmap(myBitmap2, (float) (myMidPoint.x - myEyesDistance * 2.5), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
+
             }
-
+            canvas.drawBitmap(result, 0, 0, null);
         }
+    }
 
+
+    // Fonction onMeasure permettant à la vue de se mesurer pour obtenir ses dimenssions dans l'activité
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        //MUST CALL THIS
+        setMeasuredDimension(widthSize, heightSize);
     }
 
     public void setBitmapUriPath(String bitmapUriPath) {
@@ -151,6 +163,11 @@ public class myView extends View {
         this.bitmapPath = bitmapPath;
         invalidate();
         requestLayout();
+    }
+
+    // Getter pour le bitmap contenant l'image modifiée
+    public Bitmap getResult() {
+        return result;
     }
 
     // Code récupérer permettant de tourner la photo suivant l'orientation de l'appareil
