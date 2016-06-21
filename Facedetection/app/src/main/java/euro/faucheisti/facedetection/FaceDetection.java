@@ -5,6 +5,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -13,6 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -31,6 +36,9 @@ public class FaceDetection extends AppCompatActivity {
     private int OUVRIR_GALERIE = 1;
     private int PRENDRE_PHOTO = 2;
 
+    private ImageView flag;
+    private ImageView flag2;
+
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -39,6 +47,20 @@ public class FaceDetection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_detection);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        BitmapFactory.Options BitmapFactoryOptionsbfo;
+
+        BitmapFactoryOptionsbfo = new BitmapFactory.Options();
+        BitmapFactoryOptionsbfo.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        Bitmap flags = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
+        Bitmap flags2 = BitmapFactory.decodeResource(getResources(),R.drawable.flags2,BitmapFactoryOptionsbfo);
+
+        flag = (ImageView) findViewById(R.id.flag);
+        flag.setImageBitmap(flags);
+
+        flag2 = (ImageView) findViewById(R.id.flag2);
+        flag2.setImageBitmap(flags2);
 
 
         // Demande la permission de lire des fichiers du stockage de l'appareil
@@ -51,7 +73,24 @@ public class FaceDetection extends AppCompatActivity {
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
 
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        System.out.println(flag.getWidth());
+        // Animation de défilement des drapeaux
+        TranslateAnimation anim = new TranslateAnimation(0.0f,(float) flag.getWidth(), 0.0f, 0.0f);
+        anim.setDuration(10000);
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setRepeatMode(Animation.REVERSE);
+        flag.startAnimation(anim);
+
+        TranslateAnimation anim2 = new TranslateAnimation(-((float) flag.getWidth()), 0.0f, 0.0f, 0.0f);
+        anim2.setDuration(10000);
+        anim2.setRepeatCount(Animation.INFINITE);
+        anim2.setRepeatMode(Animation.REVERSE);
+        flag2.startAnimation(anim2);
     }
 
 

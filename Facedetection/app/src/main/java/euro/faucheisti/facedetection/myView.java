@@ -64,8 +64,6 @@ public class myView extends View {
         BitmapFactoryOptionsbfo.inPreferredConfig = Bitmap.Config.RGB_565;
         bitmapUriPath = attr.getString(R.styleable.myView_bitmapUriPath);
         bitmapPath = attr.getString(R.styleable.myView_bitmapPath);
-        System.out.println(bitmapPath);
-        System.out.println(bitmapUriPath);
 
 
 
@@ -122,11 +120,15 @@ public class myView extends View {
             myBitmap = Bitmap.createScaledBitmap(myBitmap, this.getWidth(), this.getHeight(), true);
             imageWidth = myBitmap.getWidth();
             imageHeight = myBitmap.getHeight();
+
+            // Détecte les visages
             myFace = new FaceDetector.Face[numberOfFace];
             myFaceDetect = new FaceDetector(imageWidth, imageHeight, numberOfFace);
             numberOfFaceDetected = myFaceDetect.findFaces(myBitmap, myFace);
             temp.drawBitmap(myBitmap, 0, 0, null);
 
+
+            ///Dessine la perruque
             if (numberOfFaceDetected != 0) {
                 FaceDetector.Face face = myFace[0];
                 PointF myMidPoint = new PointF();
