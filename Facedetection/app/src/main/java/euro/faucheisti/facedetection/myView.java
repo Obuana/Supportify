@@ -9,23 +9,17 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.media.ExifInterface;
 import android.media.FaceDetector;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import java.io.IOException;
 
@@ -44,9 +38,12 @@ public class myView extends View {
 
     BitmapFactory.Options BitmapFactoryOptionsbfo;
 
-    Bitmap myBitmap;
-    Bitmap myBitmap2;
+    Bitmap maPhoto;
+    Bitmap perruque;
+    Bitmap maillot;
     Bitmap result;
+
+    int size;
 
     Context context;
 
@@ -67,7 +64,9 @@ public class myView extends View {
 
 
 
-        myBitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.perruque,BitmapFactoryOptionsbfo);
+        perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque,BitmapFactoryOptionsbfo);
+        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.maillot2,BitmapFactoryOptionsbfo);
+        size = maillot.getHeight();
 
     }
 
@@ -77,13 +76,13 @@ public class myView extends View {
         ExifInterface exif = null;
         try {
             if(!bitmapUriPath.equals("")) {
-                myBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(bitmapUriPath));
-                myBitmap = myBitmap.copy(Bitmap.Config.RGB_565, true);
+                maPhoto = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(bitmapUriPath));
+                maPhoto = maPhoto.copy(Bitmap.Config.RGB_565, true);
                 exif = new ExifInterface(getPath(context, Uri.parse(bitmapUriPath)));
                 bitmapUriPath = "";
 
             }else if(!bitmapPath.equals("")){
-                myBitmap = BitmapFactory.decodeFile(bitmapPath, BitmapFactoryOptionsbfo);
+                maPhoto = BitmapFactory.decodeFile(bitmapPath, BitmapFactoryOptionsbfo);
                 exif = new ExifInterface(bitmapPath);
                 bitmapPath = "";
 
@@ -92,7 +91,7 @@ public class myView extends View {
             e.printStackTrace();
         }
 
-        if (myBitmap != null) {
+        if (maPhoto != null) {
             // Code récupérer permettant de tourner la photo suivant l'orientation de l'appareil
             int orientation = ExifInterface.ORIENTATION_NORMAL;
 
@@ -101,31 +100,31 @@ public class myView extends View {
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
-                    myBitmap = rotateBitmap(myBitmap, 90);
+                    maPhoto = rotateBitmap(maPhoto, 90);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
-                    myBitmap = rotateBitmap(myBitmap, 180);
+                    maPhoto = rotateBitmap(maPhoto, 180);
                     break;
 
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    myBitmap = rotateBitmap(myBitmap, 270);
+                    maPhoto = rotateBitmap(maPhoto, 270);
                     break;
             }
 
         }
 
-        if (myBitmap != null) {
+        if (maPhoto != null) {
             result = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
             Canvas temp = new Canvas(result);
-            myBitmap = Bitmap.createScaledBitmap(myBitmap, this.getWidth(), this.getHeight(), true);
-            imageWidth = myBitmap.getWidth();
-            imageHeight = myBitmap.getHeight();
+            maPhoto = Bitmap.createScaledBitmap(maPhoto, this.getWidth(), this.getHeight(), true);
+            imageWidth = maPhoto.getWidth();
+            imageHeight = maPhoto.getHeight();
 
             // Détecte les visages
             myFace = new FaceDetector.Face[numberOfFace];
             myFaceDetect = new FaceDetector(imageWidth, imageHeight, numberOfFace);
-            numberOfFaceDetected = myFaceDetect.findFaces(myBitmap, myFace);
-            temp.drawBitmap(myBitmap, 0, 0, null);
+            numberOfFaceDetected = myFaceDetect.findFaces(maPhoto, myFace);
+            temp.drawBitmap(maPhoto, 0, 0, null);
 
 
             ///Dessine la perruque
@@ -134,9 +133,11 @@ public class myView extends View {
                 PointF myMidPoint = new PointF();
                 face.getMidPoint(myMidPoint);
                 myEyesDistance = face.eyesDistance();
-                myBitmap2 = Bitmap.createScaledBitmap(myBitmap2, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
+                perruque = Bitmap.createScaledBitmap(perruque, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
+                maillot = Bitmap.createScaledBitmap(maillot, (int) (myEyesDistance * 8), (int) (size*1.5), true);
 
-                temp.drawBitmap(myBitmap2, (float) (myMidPoint.x - myEyesDistance * 2.5), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
+                temp.drawBitmap(maillot, (float) (myMidPoint.x - myEyesDistance * 4.1), (float) (myMidPoint.y + myEyesDistance * 1.3), null);
+                temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.6), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
 
             }
             canvas.drawBitmap(result, 0, 0, null);

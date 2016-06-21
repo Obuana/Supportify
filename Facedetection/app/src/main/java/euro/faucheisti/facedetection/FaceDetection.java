@@ -78,7 +78,6 @@ public class FaceDetection extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        System.out.println(flag.getWidth());
         // Animation de défilement des drapeaux
         TranslateAnimation anim = new TranslateAnimation(0.0f,(float) flag.getWidth(), 0.0f, 0.0f);
         anim.setDuration(10000);

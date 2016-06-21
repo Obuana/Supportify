@@ -53,9 +53,10 @@ public class SaveActivity extends AppCompatActivity {
 
         File f = new File(imagePath);
 
-        String txtShare = "Créé avec Supportify";
+        // Uri de l'image pour le transfert
         final Uri uri = FileProvider.getUriForFile(context, "euro.faucheisti.facedetection.fileprovider", f);
 
+        // Intent de partage recevant l'uri en paramètre
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("image/png");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
