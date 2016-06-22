@@ -64,4 +64,9 @@ public class SaveActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Partagé via"));
 
     }
+
+    public void retourMenu(View view) {
+        Intent mainActivity = new Intent(context, FaceDetection.class);
+        startActivity(mainActivity);
+    }
 }

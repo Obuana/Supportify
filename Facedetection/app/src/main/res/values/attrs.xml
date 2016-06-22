@@ -3,5 +3,6 @@
     <declare-styleable name="myView">
         <attr name="bitmapPath" format="string"/>
         <attr name="bitmapUriPath" format="string"/>
+        <attr name="pays" format="string"/>
     </declare-styleable>
 </resources>

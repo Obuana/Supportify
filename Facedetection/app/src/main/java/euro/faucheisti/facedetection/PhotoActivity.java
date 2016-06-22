@@ -3,20 +3,22 @@ package euro.faucheisti.facedetection;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class PhotoActivity extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class PhotoActivity extends AppCompatActivity {
     private Bitmap photo = null;
 
     private myView mView;
+    private ArrayAdapter<String> adapter;
 
     private String mCurrentPhotoPath;
 
@@ -38,6 +41,31 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
         mView = (myView) findViewById(R.id.view);
 
+
+        // Création et assignation d'une liste à la vue
+        final ArrayList<String> listPays = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listPays);
+        final ListView list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(adapter);
+
+        // Configuration de la liste de pays
+        listPays.add("France");
+        listPays.add("England");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();           }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                Object o = ((ListView)arg0).getItemAtPosition(position);
+                mView.setPays(o.toString());
+            }
+        });
 
         Intent i = getIntent();
 

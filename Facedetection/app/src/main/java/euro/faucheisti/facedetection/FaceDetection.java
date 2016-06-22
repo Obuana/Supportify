@@ -54,7 +54,7 @@ public class FaceDetection extends AppCompatActivity {
         BitmapFactoryOptionsbfo.inPreferredConfig = Bitmap.Config.RGB_565;
 
         Bitmap flags = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
-        Bitmap flags2 = BitmapFactory.decodeResource(getResources(),R.drawable.flags2,BitmapFactoryOptionsbfo);
+        Bitmap flags2 = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
 
         flag = (ImageView) findViewById(R.id.flag);
         flag.setImageBitmap(flags);

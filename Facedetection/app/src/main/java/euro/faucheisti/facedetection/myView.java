@@ -36,6 +36,7 @@ public class myView extends View {
 
     private String bitmapUriPath;
     private String bitmapPath;
+    private String pays;
 
     BitmapFactory.Options BitmapFactoryOptionsbfo;
 
@@ -64,10 +65,7 @@ public class myView extends View {
         bitmapPath = attr.getString(R.styleable.myView_bitmapPath);
 
 
-
-        perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque,BitmapFactoryOptionsbfo);
-        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.maillot2,BitmapFactoryOptionsbfo);
-        size = maillot.getHeight();
+        pays = "France";
 
     }
 
@@ -128,9 +126,17 @@ public class myView extends View {
             numberOfFaceDetected = myFaceDetect.findFaces(maPhoto, myFace);
             temp.drawBitmap(maPhoto, 0, 0, null);
 
-
             ///Dessine la perruque
             if (numberOfFaceDetected != 0) {
+                switch (pays){
+                    case "France": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_france,BitmapFactoryOptionsbfo);
+                        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.maillot_france,BitmapFactoryOptionsbfo);
+                        break;
+                    case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
+                        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
+                        break;
+
+                }
                 FaceDetector.Face face = myFace[0];
                 PointF myMidPoint = new PointF();
                 face.getMidPoint(myMidPoint);
@@ -153,6 +159,8 @@ public class myView extends View {
 
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        if(maillot!=null)
+            size = maillot.getHeight();
 
         //MUST CALL THIS
         setMeasuredDimension(widthSize, heightSize);
@@ -166,6 +174,12 @@ public class myView extends View {
 
     public void setBitmapPath(String bitmapPath) {
         this.bitmapPath = bitmapPath;
+        invalidate();
+        requestLayout();
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
         invalidate();
         requestLayout();
     }

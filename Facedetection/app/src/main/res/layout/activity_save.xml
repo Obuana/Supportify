@@ -21,7 +21,18 @@
         android:layout_height="wrap_content"
         android:text="Partager"
         android:id="@+id/bShare"
+        android:onClick="partagerPhoto"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="partagerPhoto" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retour à l&apos;acceuil"
+        android:id="@+id/bHome"
+        android:onClick="retourMenu"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
