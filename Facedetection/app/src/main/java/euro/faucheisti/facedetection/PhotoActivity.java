@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +66,22 @@ public class PhotoActivity extends AppCompatActivity {
 
     }
 
+    // Rafraichie la gallerie après avoir sauvegardé l'image
+    public void callBroadCast() {
+        if (Build.VERSION.SDK_INT >= 14) {
+            MediaScannerConnection.scanFile(context, new String[]{mCurrentPhotoPath}, null, new MediaScannerConnection.OnScanCompletedListener() {
+
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+
+                }
+            });
+        } else {
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
+    }
+
     // Code du bouton pour envoyer la photo à la dernière activité pour sauvegarder
     public void sauvegarderImage(View view) {
 
@@ -85,7 +104,7 @@ public class PhotoActivity extends AppCompatActivity {
                     ".jpg",         /* suffix */
                     storageDir      /* directory */
             );
-            // CHemin de l'emplacement où la photot modifiée seras enregistrée
+            // Chemin de l'emplacement où la photot modifiée seras enregistrée
             mCurrentPhotoPath = image.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,6 +116,9 @@ public class PhotoActivity extends AppCompatActivity {
             photo.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
+
+            callBroadCast();
+
         } catch(Exception e) {
             e.printStackTrace();
         }

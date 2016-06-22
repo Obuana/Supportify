@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.io.File;
 import java.io.IOException;
 
 public class myView extends View {
@@ -84,6 +85,7 @@ public class myView extends View {
             }else if(!bitmapPath.equals("")){
                 maPhoto = BitmapFactory.decodeFile(bitmapPath, BitmapFactoryOptionsbfo);
                 exif = new ExifInterface(bitmapPath);
+                deleteImage(bitmapPath);
                 bitmapPath = "";
 
             }
@@ -134,9 +136,9 @@ public class myView extends View {
                 face.getMidPoint(myMidPoint);
                 myEyesDistance = face.eyesDistance();
                 perruque = Bitmap.createScaledBitmap(perruque, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
-                maillot = Bitmap.createScaledBitmap(maillot, (int) (myEyesDistance * 8), (int) (size*1.5), true);
+                maillot = Bitmap.createScaledBitmap(maillot, (int) (myEyesDistance * 8), (int) (myEyesDistance * 9.2), true);
 
-                temp.drawBitmap(maillot, (float) (myMidPoint.x - myEyesDistance * 4.1), (float) (myMidPoint.y + myEyesDistance * 1.3), null);
+                temp.drawBitmap(maillot, (float) (myMidPoint.x - myEyesDistance * 4.1), (float) (myMidPoint.y + myEyesDistance * 1.8), null);
                 temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.6), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
 
             }
@@ -166,6 +168,12 @@ public class myView extends View {
         this.bitmapPath = bitmapPath;
         invalidate();
         requestLayout();
+    }
+
+    // Supprime la photo prise dans l'appli
+    public void deleteImage(String Path) {
+        File fdelete = new File(Path);
+        fdelete.delete();
     }
 
     // Getter pour le bitmap contenant l'image modifiée

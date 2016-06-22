@@ -142,7 +142,7 @@ public class FaceDetection extends AppCompatActivity {
             photoActivity.putExtra("uriPath", path);
             startActivity(photoActivity);
 
-
+        //Fonction éxécutée quand une photo à été prise
         } else if (requestCode == PRENDRE_PHOTO ){
             if (resultCode ==  RESULT_OK  ){
 
