@@ -81,9 +81,6 @@ public class PhotoActivity extends AppCompatActivity {
             mView.setBitmapUriPath(uriPath);
         }
 
-
-
-
     }
 
 

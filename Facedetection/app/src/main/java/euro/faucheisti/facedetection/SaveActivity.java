@@ -61,7 +61,7 @@ public class SaveActivity extends AppCompatActivity {
         sharingIntent.setType("image/png");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(sharingIntent, "Partagé via"));
+        startActivity(Intent.createChooser(sharingIntent, "Partager via"));
 
     }
 
