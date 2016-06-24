@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,12 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +37,7 @@ public class FaceDetection extends AppCompatActivity {
 
     private Context context = this;
 
+    private InterstitialAd mInterstitialAd;
     String mCurrentPhotoPath;
 
 
@@ -48,6 +56,21 @@ public class FaceDetection extends AppCompatActivity {
         setContentView(R.layout.activity_face_detection);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        // Crée une pub en plein écran
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6592999730904348/2235101914");
+        AdRequest adRequestInt = new AdRequest.Builder()
+                .addTestDevice("YOUR_DEVICE_HASH")
+                .build();
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialAd.show();
+            }
+        });
+        mInterstitialAd.loadAd(adRequestInt);
+
         BitmapFactory.Options BitmapFactoryOptionsbfo;
 
         BitmapFactoryOptionsbfo = new BitmapFactory.Options();
@@ -65,7 +88,7 @@ public class FaceDetection extends AppCompatActivity {
 
         // Demande la permission de lire des fichiers du stockage de l'appareil
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.INTERNET},
                 1);
 
         // Demande la permission d'écrire dans des fichiers du stockage de l'appareil
@@ -73,11 +96,20 @@ public class FaceDetection extends AppCompatActivity {
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 2);
 
+
+        // Crée une bannière sur la page d'acceuil
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        if (mAdView != null) {
+            mAdView.loadAd(adRequest);
+        }
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
         // Animation de défilement des drapeaux
         TranslateAnimation anim = new TranslateAnimation(0.0f,(float) flag.getWidth(), 0.0f, 0.0f);
         anim.setDuration(10000);

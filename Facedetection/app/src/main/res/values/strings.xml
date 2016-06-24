@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Supportify</string>
+    <string name="banner_ad_unit_id">ca-app-pub-6592999730904348/8281635510</string>
+    <string name="inter_ad_unit_id">ca-app-pub-6592999730904348/2235101914</string>
 </resources>
