@@ -45,7 +45,6 @@ public class myView extends View {
     Bitmap perruque;
     Bitmap tatouage_droite;
     Bitmap tatouage_gauche;
-    Bitmap maillot;
     Bitmap result;
 
     int size;
@@ -133,11 +132,9 @@ public class myView extends View {
             if (numberOfFaceDetected != 0) {
                 switch (pays){
                     case "France": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_france,BitmapFactoryOptionsbfo);
-                        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.maillot_france,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
                         break;
                     case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
-                        maillot = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
                         break;
 
@@ -147,13 +144,11 @@ public class myView extends View {
                 face.getMidPoint(myMidPoint);
                 myEyesDistance = face.eyesDistance();
                 perruque = Bitmap.createScaledBitmap(perruque, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
-                maillot = Bitmap.createScaledBitmap(maillot, (int) (myEyesDistance * 8), (int) (myEyesDistance * 9.2), true);
                 tatouage_droite = Bitmap.createScaledBitmap(tatouage_droite, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
                 tatouage_gauche = flip(tatouage_droite);
 
                 temp.drawBitmap(tatouage_droite, (float) (myMidPoint.x + myEyesDistance / 3), (float) (myMidPoint.y + myEyesDistance * 0.5), null);
                 temp.drawBitmap(tatouage_gauche, (float) (myMidPoint.x - myEyesDistance * 0.85), (float) (myMidPoint.y + myEyesDistance *0.5), null);
-                temp.drawBitmap(maillot, (float) (myMidPoint.x - myEyesDistance * 4.1), (float) (myMidPoint.y + myEyesDistance * 1.8), null);
                 temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.6), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
 
             }
@@ -168,8 +163,6 @@ public class myView extends View {
 
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        if(maillot!=null)
-            size = maillot.getHeight();
 
         //MUST CALL THIS
         setMeasuredDimension(widthSize, heightSize);

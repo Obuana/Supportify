@@ -13,7 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
 import java.io.File;
+import java.util.Random;
 
 public class SaveActivity extends AppCompatActivity {
 
@@ -23,10 +29,39 @@ public class SaveActivity extends AppCompatActivity {
     private String imagePath;
     private Context context = this;
 
+    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save);
+
+        // Crée une pub en plein écran
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6592999730904348/1703391513");
+        AdRequest adRequestInt = new AdRequest.Builder()
+                .addTestDevice("B98205274F0FFB976C9A1618B7784EA0")
+                .build();
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Random gen = new Random();
+                System.out.println(gen.nextDouble());
+                if (gen.nextDouble() < 0.6){
+                    mInterstitialAd.show();
+                }
+            }
+        });
+        mInterstitialAd.loadAd(adRequestInt);
+
+        // Crée une bannière sur la page d'acceuil
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("B98205274F0FFB976C9A1618B7784EA0")
+                .build();
+        if (mAdView != null) {
+            mAdView.loadAd(adRequest);
+        }
 
         imgView = (ImageView) findViewById(R.id.imageView);
 

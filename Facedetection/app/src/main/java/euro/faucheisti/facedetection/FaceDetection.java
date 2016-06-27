@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class FaceDetection extends AppCompatActivity {
 
@@ -61,12 +62,16 @@ public class FaceDetection extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-6592999730904348/2235101914");
         AdRequest adRequestInt = new AdRequest.Builder()
-                .addTestDevice("YOUR_DEVICE_HASH")
+                .addTestDevice("B98205274F0FFB976C9A1618B7784EA0")
                 .build();
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                mInterstitialAd.show();
+                Random gen = new Random();
+                System.out.println(gen.nextDouble());
+                if (gen.nextDouble() < 0.6){
+                    mInterstitialAd.show();
+                }
             }
         });
         mInterstitialAd.loadAd(adRequestInt);
@@ -99,7 +104,9 @@ public class FaceDetection extends AppCompatActivity {
 
         // Crée une bannière sur la page d'acceuil
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("B98205274F0FFB976C9A1618B7784EA0")
+                .build();
         if (mAdView != null) {
             mAdView.loadAd(adRequest);
         }
