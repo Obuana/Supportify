@@ -53,7 +53,8 @@
         android:layout_below="@+id/text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:fastScrollEnabled="false" />
+        android:fastScrollEnabled="false"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_width="120dp"
@@ -66,5 +67,6 @@
         android:background="#e4e4e4"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false" />
+        android:layout_alignParentStart="false"
+        android:textAlignment="center" />
 </RelativeLayout>

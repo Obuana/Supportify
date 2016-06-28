@@ -46,8 +46,7 @@ public class SaveActivity extends AppCompatActivity {
             @Override
             public void onAdLoaded() {
                 Random gen = new Random();
-                System.out.println(gen.nextDouble());
-                if (gen.nextDouble() < 0.6){
+                if (gen.nextDouble() < 0.5){
                     mInterstitialAd.show();
                 }
             }

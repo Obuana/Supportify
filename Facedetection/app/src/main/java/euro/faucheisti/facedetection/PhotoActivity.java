@@ -44,28 +44,32 @@ public class PhotoActivity extends AppCompatActivity {
 
         // Création et assignation d'une liste à la vue
         final ArrayList<String> listPays = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listPays);
+        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,listPays);
         final ListView list = (ListView) findViewById(R.id.listView);
-        list.setAdapter(adapter);
+        if (list != null) {
+            list.setAdapter(adapter);
 
-        // Configuration de la liste de pays
-        listPays.add("France");
-        listPays.add("England");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();           }
-        });
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // Configuration de la liste de pays
+            listPays.add("France");
+            listPays.add("England");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                Object o = ((ListView)arg0).getItemAtPosition(position);
-                mView.setPays(o.toString());
-            }
-        });
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                    Object o = (arg0).getItemAtPosition(position);
+                    mView.setPays(o.toString());
+                }
+            });
+        }
 
         Intent i = getIntent();
 
@@ -109,11 +113,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     // Code du bouton pour envoyer la photo à la dernière activité pour sauvegarder
     public void sauvegarderImage(View view) {
-
-        mView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.EXACTLY));
-
-        mView.layout(0, 0, mView.getMeasuredWidth(), mView.getMeasuredHeight());
 
         photo=mView.getResult();
         photo=photo.copy(Bitmap.Config.RGB_565,false);

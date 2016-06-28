@@ -115,7 +115,8 @@ public class myView extends View {
         }
 
         if (maPhoto != null) {
-            result = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
+            result = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
+            System.out.println(canvas.getWidth());
             Canvas temp = new Canvas(result);
             maPhoto = Bitmap.createScaledBitmap(maPhoto, this.getWidth(), this.getHeight(), true);
             imageWidth = maPhoto.getWidth();
@@ -127,13 +128,14 @@ public class myView extends View {
             numberOfFaceDetected = myFaceDetect.findFaces(maPhoto, myFace);
             temp.drawBitmap(maPhoto, 0, 0, null);
 
-            ///Dessine la perruque
             if (numberOfFaceDetected != 0) {
+
+                // Applique les configurations en fonction du pays choisis
                 switch (pays){
                     case "France": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_france,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
                         break;
-                    case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.flags,BitmapFactoryOptionsbfo);
+                    case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_angleterre,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
                         break;
 
@@ -146,6 +148,7 @@ public class myView extends View {
                 tatouage_droite = Bitmap.createScaledBitmap(tatouage_droite, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
                 tatouage_gauche = flip(tatouage_droite);
 
+                // Dessine les différents effets
                 temp.drawBitmap(tatouage_droite, (float) (myMidPoint.x + myEyesDistance / 3), (float) (myMidPoint.y + myEyesDistance * 0.5), null);
                 temp.drawBitmap(tatouage_gauche, (float) (myMidPoint.x - myEyesDistance * 0.85), (float) (myMidPoint.y + myEyesDistance *0.5), null);
                 temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.6), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
@@ -155,17 +158,6 @@ public class myView extends View {
         }
     }
 
-
-    // Fonction onMeasure permettant à la vue de se mesurer pour obtenir ses dimenssions dans l'activité
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        //MUST CALL THIS
-        setMeasuredDimension(widthSize, heightSize);
-    }
 
     public void setBitmapUriPath(String bitmapUriPath) {
         this.bitmapUriPath = bitmapUriPath;
