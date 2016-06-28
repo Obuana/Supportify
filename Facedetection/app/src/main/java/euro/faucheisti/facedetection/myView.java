@@ -66,7 +66,6 @@ public class myView extends View {
         bitmapUriPath = attr.getString(R.styleable.myView_bitmapUriPath);
         bitmapPath = attr.getString(R.styleable.myView_bitmapPath);
 
-
         pays = "France";
 
     }
