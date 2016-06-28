@@ -134,6 +134,7 @@ public class myView extends View {
                 switch (pays){
                     case "France": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_france,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
+                        tatouage_gauche = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france_2,BitmapFactoryOptionsbfo);
                         break;
                     case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_angleterre,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
@@ -146,7 +147,7 @@ public class myView extends View {
                 myEyesDistance = face.eyesDistance();
                 perruque = Bitmap.createScaledBitmap(perruque, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
                 tatouage_droite = Bitmap.createScaledBitmap(tatouage_droite, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
-                tatouage_gauche = flip(tatouage_droite);
+                tatouage_gauche = Bitmap.createScaledBitmap(tatouage_gauche, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
 
                 // Dessine les différents effets
                 temp.drawBitmap(tatouage_droite, (float) (myMidPoint.x + myEyesDistance / 3), (float) (myMidPoint.y + myEyesDistance * 0.5), null);
@@ -192,7 +193,7 @@ public class myView extends View {
     Bitmap flip(Bitmap d)
     {
         Matrix m = new Matrix();
-        m.preScale(-1, 1);
+        m.preRotate(270);
         Bitmap dst = Bitmap.createBitmap(d, 0, 0, d.getWidth(), d.getHeight(), m, false);
         dst.setDensity(DisplayMetrics.DENSITY_DEFAULT);
         return dst;
