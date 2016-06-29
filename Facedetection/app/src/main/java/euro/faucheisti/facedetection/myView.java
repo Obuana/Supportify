@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.media.ExifInterface;
 import android.media.FaceDetector;
@@ -20,7 +21,10 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +51,8 @@ public class myView extends View {
     Bitmap tatouage_gauche;
     Bitmap result;
 
-    int size;
+    double scaleX = 1;
+    double scaleY = 1;
 
     Context context;
 
@@ -68,10 +73,20 @@ public class myView extends View {
 
         pays = "France";
 
+        WindowManager wm = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
+        Display ds = wm.getDefaultDisplay();
+        Point p = new Point();
+        ds.getSize(p);
+
+        scaleX = p.x / 768;
+        scaleY = p.y / 1024;
+
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+
 
         ExifInterface exif = null;
         try {
@@ -116,7 +131,6 @@ public class myView extends View {
 
         if (maPhoto != null) {
             result = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
-            System.out.println(canvas.getWidth());
             Canvas temp = new Canvas(result);
             maPhoto = Bitmap.createScaledBitmap(maPhoto, this.getWidth(), this.getHeight(), true);
             imageWidth = maPhoto.getWidth();
@@ -138,21 +152,23 @@ public class myView extends View {
                         break;
                     case "England": perruque = BitmapFactory.decodeResource(getResources(),R.drawable.perruque_angleterre,BitmapFactoryOptionsbfo);
                         tatouage_droite = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france,BitmapFactoryOptionsbfo);
+                        tatouage_gauche = BitmapFactory.decodeResource(getResources(),R.drawable.tatouage_france_2,BitmapFactoryOptionsbfo);
                         break;
 
                 }
                 FaceDetector.Face face = myFace[0];
                 PointF myMidPoint = new PointF();
                 face.getMidPoint(myMidPoint);
+
                 myEyesDistance = face.eyesDistance();
-                perruque = Bitmap.createScaledBitmap(perruque, (int) myEyesDistance * 5, (int) (myEyesDistance * 5), true);
-                tatouage_droite = Bitmap.createScaledBitmap(tatouage_droite, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
-                tatouage_gauche = Bitmap.createScaledBitmap(tatouage_gauche, (int) (myEyesDistance / 2), (int) (myEyesDistance / 2), true);
+                perruque = Bitmap.createScaledBitmap(perruque, (int) (myEyesDistance * 4.9 * scaleX), (int) (myEyesDistance * 5 * scaleY), true);
+                tatouage_droite = Bitmap.createScaledBitmap(tatouage_droite, (int) (myEyesDistance / 2.3 * scaleX), (int) (myEyesDistance / 2.3 * scaleY), true);
+                tatouage_gauche = Bitmap.createScaledBitmap(tatouage_gauche, (int) (myEyesDistance / 2.3 * scaleX), (int) (myEyesDistance / 2.3 * scaleY), true);
 
                 // Dessine les différents effets
-                temp.drawBitmap(tatouage_droite, (float) (myMidPoint.x + myEyesDistance / 3), (float) (myMidPoint.y + myEyesDistance * 0.5), null);
-                temp.drawBitmap(tatouage_gauche, (float) (myMidPoint.x - myEyesDistance * 0.85), (float) (myMidPoint.y + myEyesDistance *0.5), null);
-                temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.6), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
+                temp.drawBitmap(tatouage_droite, (float) (myMidPoint.x + myEyesDistance / 2.5), (float) (myMidPoint.y + myEyesDistance * 0.5), null);
+                temp.drawBitmap(tatouage_gauche, (float) (myMidPoint.x - myEyesDistance * 0.75), (float) (myMidPoint.y + myEyesDistance *0.5), null);
+                temp.drawBitmap(perruque, (float) (myMidPoint.x - myEyesDistance * 2.5), (float) (myMidPoint.y - myEyesDistance * 3.4), null);
 
             }
             canvas.drawBitmap(result, 0, 0, null);
